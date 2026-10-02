@@ -1,0 +1,68 @@
+package com.example.travelproject.Inventory;
+
+import com.example.travelproject.map.shop;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(name = "inventory")
+public class Product {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shop_id", nullable = false)
+    @JsonIgnore // Hides the complex shop object
+    private shop shop;
+
+    @Column(name = "product_name", nullable = false)
+    private String productName;
+
+    @Column(name = "product_description", length = 5000)
+    private String productDescription;
+
+    @Column(name = "category")
+    private String category;
+
+    @Column(name = "price")
+    private Double price;
+
+    @Column(name = "available")
+    private Integer available;
+
+    @Column(name = "image_url")
+    private String imageUrl;
+
+    @Column(name = "rental_condition")
+    private String rentalCondition;
+
+    @Column(name = "min_duration")
+    private Integer minDuration;
+
+    @Column(name = "cleaning_fee")
+    private String cleaningFee;
+
+    public void setShopId(Long shopId) {
+        if (shopId != null) {
+            shop s = new shop();
+            s.setId(shopId);
+            this.shop = s;
+        }
+    }
+
+    // 👇 ADDED THIS GETTER
+    public Long getShopId() {
+        if (this.shop != null) {
+            return this.shop.getId();
+        }
+        return null;
+    }
+}
